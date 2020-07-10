@@ -8,7 +8,7 @@ class PokemonDetail extends React.Component {
 		this.state = {
 			name: "",
 			types: "",
-			"evolution": {},
+			"evolution": [],
 			"img": ""
 		};
 	}
@@ -41,21 +41,21 @@ class PokemonDetail extends React.Component {
 
 	loadPokemonDetail() {
 		let pokemonData = {};
+		let pokemonSpeciesData = {};
 		let pokemonId = this.props.match.params.id;
 
 		return this.loadPokemonData(pokemonId)
 			.then(data => {
 				pokemonData = data;
-				return this.loadPokemonEvolutionChain(pokemonId);
+				return this.loadPokemonSpecies(pokemonId);
+			}).then(data => {
+				pokemonSpeciesData = data;
+				return this.loadPokemonEvolutionChain(pokemonSpeciesData.evolution_chain.url);
 			}).then(evolutionChain => {
-				console.log(evolutionChain);
 				return {
 					name: pokemonData.name,
 					types: pokemonData.types.map((type => type.type.name)).join(", "),
-					evolution: {
-						"name": evolutionChain.chain.evolves_to[0]?.species.name,
-						"id": this.getIdFromAPIUrl(evolutionChain.chain.evolves_to[0]?.species.url)
-					},
+					evolution: this.getEvolutionChainData(evolutionChain.chain),
 					img: pokemonData.sprites.front_default
 				}
 			});
@@ -70,8 +70,17 @@ class PokemonDetail extends React.Component {
 			});
 	}
 
-	loadPokemonEvolutionChain(id) {
-		return fetch(`https://pokeapi.co/api/v2/evolution-chain/${id}`)
+	loadPokemonEvolutionChain(APIUrl) {
+		return fetch(APIUrl)
+			.then(results => {
+				return results.json();
+			}).then(data => {
+				return data;
+			});
+	}
+
+	loadPokemonSpecies(id) {
+		return fetch(`https://pokeapi.co/api/v2/pokemon-species/${id}`)
 			.then(results => {
 				return results.json();
 			}).then(data => {
@@ -83,13 +92,41 @@ class PokemonDetail extends React.Component {
 		return url && url.length > 0 ? url.split("/").slice(-2)[0] : ""
 	}
 
+	getEvolutionChainData(chain) {
+		var evolutionChain = [];
+		var currentChain = chain;
+		while (currentChain) {
+			console.log(currentChain);
+			evolutionChain.push({
+				name: currentChain.species.name,
+				id: this.getIdFromAPIUrl(currentChain.species.url)
+			});
+			
+		 	currentChain = currentChain.evolves_to[0];
+		}
+		console.log(evolutionChain);
+		return evolutionChain;
+	}
+
 	render() {
 		return (
 			<div className="pokemon-detail">
+				<Link to="/">&lt; Retour</Link>
 				<h1>{this.state.name}</h1>
 				<img src={this.state.img} alt={this.state.name} />
 				<p>{this.state.types}</p>
-				<p><Link to={`/detail/id/${this.state.evolution.id}`}>{this.state.evolution.name}</Link></p>
+				<p>
+					{
+						this.state.evolution.map((evolution, index) => {
+							return (
+								<span>
+									{index > 0 && <span> &gt; </span>}
+									<Link key={index} to={`/detail/id/${evolution.id}`}>{evolution.name}</Link>
+								</span>
+							)
+						})
+					}
+				</p>
 			</div>
 		);
 	}

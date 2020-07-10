@@ -41,14 +41,19 @@ class PokemonIndex extends React.Component {
 			});
 	}
 
+	getIdFromAPIUrl(url) {
+		return url && url.length > 0 ? url.split("/").slice(-2)[0] : ""
+	}
+
 	render() {
 		return (
 			<div className={`pokedex-index ${this.state.isFetching ? 'pokedex-index_loading' : ''}`}>
 				<ul>
 					{
-						this.state.pokemons.map((item, key) => 
-							<li key={key}><Link to={`/detail/id/${key}`}>{item.name}</Link></li>
-						)
+						this.state.pokemons.map((item) => {
+							let pokemonId = this.getIdFromAPIUrl(item.url);
+							return <li key={pokemonId}><Link to={`/detail/id/${pokemonId}`}>{item.name}</Link></li>
+						})
 					}
 				</ul>
 				<div className="pager">	
