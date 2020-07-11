@@ -1,7 +1,40 @@
 @import "../index.scss";
 
 .pokedex-index {
+	width: 600px;
+	margin: 30px auto;
 
+	&__logo {
+		max-width: 100%;
+		width: 300px;
+		height: auto;
+		margin: 0 auto 24px;
+		display: block;
+	}
+	&__list {
+		width: 100%;
+	}
+	&__list-item {
+		background-color: $lightGrey;
+		border: 1px solid $white;
+
+		a {
+			display: block;
+			padding: 12px 20px;
+			text-decoration: none;
+			color: $darkGrey;
+			font-size: 14px;
+		}
+
+		&:hover {
+			background-color: lighten($lightGrey, 1%);
+			a {
+				font-weight: bold;
+				color: $blue;
+			}
+		}
+	}
+	
 	&_loading {
 		position: relative;
 		&:after {
@@ -13,8 +46,8 @@
 			width: 40px;
 			height: 40px;
 			border-radius: 50%;
-			border: 6px solid $red;
-			border-color: $red transparent $red transparent;
+			border: 6px solid $blue;
+			border-color: $blue transparent $blue transparent;
 			animation: spin 1.2s linear infinite;
 			z-index: 3;
 		}
@@ -28,6 +61,40 @@
 			background-color: rgba($white, .8);
 			z-index: 2;
 
+		}
+	}
+}
+
+.pager {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-top: 20px;
+
+	&__button {
+		padding: 14px 20px;
+		text-transform: uppercase;
+		background-color: $blue;
+		color: $white;
+		border: none;
+		cursor: pointer;
+		transition: background-color 500ms ease;
+		outline: none;
+
+		&_prev {
+
+		}
+		&_next {
+
+		}
+		&_hide {
+			opacity: 0;
+			visibility: hidden;
+		}
+
+		&:hover {
+			background-color: darken($blue, 5%);
 		}
 	}
 }

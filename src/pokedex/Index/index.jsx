@@ -15,7 +15,7 @@ class PokemonIndex extends React.Component {
 	}
 
 	componentDidMount() {
-		this.loadPokemons('https://pokeapi.co/api/v2/pokemon?limit=20');
+		this.loadPokemons('https://pokeapi.co/api/v2/pokemon?limit=15');
 	}
 
 	handlePagerBtnClick(e) {
@@ -48,19 +48,18 @@ class PokemonIndex extends React.Component {
 	render() {
 		return (
 			<div className={`pokedex-index ${this.state.isFetching ? 'pokedex-index_loading' : ''}`}>
-				<ul>
+				<img className="pokedex-index__logo" src="/pokedex_logo.png" alt="Pokedex logo" />
+				<ul className="pokedex-index__list">
 					{
 						this.state.pokemons.map((item) => {
 							let pokemonId = this.getIdFromAPIUrl(item.url);
-							return <li key={pokemonId}><Link to={`/detail/id/${pokemonId}`}>{item.name}</Link></li>
+							return <li key={pokemonId} className="pokedex-index__list-item"><Link to={`/detail/id/${pokemonId}`}>{item.name}</Link></li>
 						})
 					}
 				</ul>
 				<div className="pager">	
-					{this.state.prevUrl != null && 
-						<button type="button" className="pager__button pager__button_prev" data-url={this.state.prevUrl} onClick={(e) => this.handlePagerBtnClick(e)}>Précédent</button>}
-					{this.state.nextUrl != null && 
-					<button type="button" className="pager__button pager__button_next" data-url={this.state.nextUrl} onClick={(e) => this.handlePagerBtnClick(e)}>Suivant</button>}
+					<button type="button" className={"pager__button pager__button_prev" + (this.state.prevUrl != null ? "" : " pager__button_hide")} data-url={this.state.prevUrl} onClick={(e) => this.handlePagerBtnClick(e)}>&lt; Précédent</button>
+					<button type="button" className={"pager__button pager__button_next" + (this.state.nextUrl != null ? "" : " pager__button_hide")} data-url={this.state.nextUrl} onClick={(e) => this.handlePagerBtnClick(e)}>Suivant &gt;</button>
 				</div>
 			</div>
 		);
