@@ -9,7 +9,8 @@ class PokemonDetail extends React.Component {
 			name: "",
 			types: "",
 			"evolution": [],
-			"img": ""
+			"img": "",
+			isFetching: false
 		};
 	}
 
@@ -20,7 +21,8 @@ class PokemonDetail extends React.Component {
 				name: data.name,
 				types: data.types,
 				evolution: data.evolution,
-				img: data.img
+				img: data.img,
+				isFetching: false
 			});
 		});
 	}
@@ -33,7 +35,8 @@ class PokemonDetail extends React.Component {
 						name: data.name,
 						types: data.types,
 						evolution: data.evolution,
-						img: data.img
+						img: data.img,
+						isFetching: false
 					});
 				});
 		}
@@ -44,6 +47,7 @@ class PokemonDetail extends React.Component {
 		let pokemonSpeciesData = {};
 		let pokemonId = this.props.match.params.id;
 
+		this.setState({ isFetching: true });
 		return this.loadPokemonData(pokemonId)
 			.then(data => {
 				pokemonData = data;
@@ -96,7 +100,6 @@ class PokemonDetail extends React.Component {
 		var evolutionChain = [];
 		var currentChain = chain;
 		while (currentChain) {
-			console.log(currentChain);
 			evolutionChain.push({
 				name: currentChain.species.name,
 				id: this.getIdFromAPIUrl(currentChain.species.url)
@@ -104,24 +107,25 @@ class PokemonDetail extends React.Component {
 			
 		 	currentChain = currentChain.evolves_to[0];
 		}
-		console.log(evolutionChain);
 		return evolutionChain;
 	}
 
 	render() {
 		return (
-			<div className="pokemon-detail">
-				<Link to="/">&lt; Retour</Link>
-				<h1>{this.state.name}</h1>
-				<img src={this.state.img} alt={this.state.name} />
-				<p>{this.state.types}</p>
-				<p>
+			<div className={`pokemon-detail ${this.state.isFetching ? 'pokemon-detail_loading' : ''}`}>
+				<Link to="/" className="pokemon-detail__back-btn">&lt; Retour</Link>
+				<h1 className="pokemon-detail__title">{this.state.name}</h1>
+				<img className="pokemon-detail__img" src={this.state.img} alt={this.state.name} />
+				<p className="pokemon-detail__types"><span>Types: </span>{this.state.types}</p>
+
+				<p className="pokemon-detail__subtitle">Evolutions</p>
+				<p className="pokemon-detail__evolutions">
 					{
 						this.state.evolution.map((evolution, index) => {
 							return (
-								<span>
+								<span key={index} className="pokemon-detail__evolution">
 									{index > 0 && <span> &gt; </span>}
-									<Link key={index} to={`/detail/id/${evolution.id}`}>{evolution.name}</Link>
+									<Link to={`/detail/id/${evolution.id}`}>{evolution.name}</Link>
 								</span>
 							)
 						})

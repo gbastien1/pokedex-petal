@@ -1,0 +1,88 @@
+@import "../index.scss";
+
+.pokemon-detail {
+    width: 400px;
+    margin: 30px auto;
+    background-color: $lightGrey;
+    padding: 30px;
+    padding-top: 16px;
+    border-radius: 20px;
+
+    &__back-btn {
+        display: inline-block;
+        text-decoration: none;
+        font-size: 14px;
+        text-transform: uppercase;
+        margin-bottom: 16px;
+        color: $grey;
+        transition: color 500ms ease;
+
+        &:hover {
+            color: $blue;
+        }
+    }
+    &__title {
+        text-transform: capitalize;
+        color: $darkGrey;
+        font-size: 48px;
+    }
+    &__img {
+        display: block;
+        margin: 20px 0;
+    }
+    &__types {
+        span {
+            font-weight: bold;
+        }
+    }
+    &__subtitle {
+        font-weight: bold;
+        margin: 20px 0 10px;
+    }
+    &__evolutions {
+
+    }
+    &__evolution {
+        span {
+            color: $grey;
+        }
+        a {
+            color: $darkGrey;
+            text-transform: capitalize;
+            transition: color 500ms ease;
+
+            &:hover {
+                color: $blue;
+            }
+        }
+    }
+
+    &_loading {
+		position: relative;
+		&:after {
+			position: absolute;
+			top: 50%; left: 50%;
+			transform: translate(-50%, -50%);
+			content: " ";
+			display: block;
+			width: 40px;
+			height: 40px;
+			border-radius: 50%;
+			border: 6px solid $blue;
+			border-color: $blue transparent $blue transparent;
+			animation: spin 1.2s linear infinite;
+			z-index: 3;
+		}
+		&:before {
+			content: " ";
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background-color: rgba($white, .8);
+			z-index: 2;
+
+		}
+	}
+}
