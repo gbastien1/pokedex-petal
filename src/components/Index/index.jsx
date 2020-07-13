@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import '../index.scss';
+import "../../App.scss";
 import './index.scss';
 
 class PokemonIndex extends React.Component {
